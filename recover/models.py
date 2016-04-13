@@ -32,6 +32,11 @@ class DDRFile(Model):
             self.file_id,
             self.collection_id,
         ])
+    
+    @staticmethod
+    def count_collections():
+        SQL = 'SELECT collection_id FROM ddrfile';
+        return set([cid for cid in db.execute_sql(SQL)])
 
 class PhotorecFile(Model):
     sha256 = CharField(primary_key=True)
@@ -45,7 +50,21 @@ class PhotorecFile(Model):
             self.sha256,
             self.path_rel
         ])
+    
+    @staticmethod
+    def count_dirs():
+        SQL = 'SELECT path_rel FROM photorecfile';
+        return set([
+            # get just the photorec dirname
+            fields[0].split('/')[0]
+            # fields is a list
+            for fields in db.execute_sql(SQL)
+        ])
 
+
+COUNT_SQL = """
+SELECT count(*) FROM %s;
+"""
 MATCH_SQL = """
 SELECT p.sha256, p.path_rel, d.collection_id, d.annex_path_rel
 FROM ddrfile d, photorecfile p
@@ -61,3 +80,8 @@ def link_photorec_ddr():
             os.path.join(cid, annex_path_rel)
         ])
     return src_dest
+
+def count_files(table):
+    return [
+        x for x in db.execute_sql(COUNT_SQL % table)
+    ][0]

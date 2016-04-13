@@ -2,7 +2,7 @@ import click
 
 import ddr
 import photorec
-from models import link_photorec_ddr
+import models
 
 
 @click.group()
@@ -36,8 +36,25 @@ def dumpcsv(source):
 def link():
     """Match photorec files to DDR files
     """
-    for src_dest in link_photorec_ddr():
+    for src_dest in models.link_photorec_ddr():
         print(','.join(src_dest))
+
+@recover.command()
+def stats():
+    """Print stats
+    """
+    collections = models.DDRFile.count_collections()
+    photorec_dirs = models.PhotorecFile.count_dirs()
+    num_ddr = models.count_files('ddrfile')
+    num_photorec = models.count_files('photorecfile')
+    src_dest = models.link_photorec_ddr()
+    num_match = len(src_dest)
+    print('ddr collections: %s' % len(collections))
+    print('  photorec dirs: %s' % len(photorec_dirs))
+    print('      ddr files: %s' % num_ddr)
+    print(' photorec files: %s' % num_photorec)
+    print('        matches: %s' % num_match)
+    
 
 
 if __name__ == '__main__':
