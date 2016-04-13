@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import os
 
@@ -83,19 +84,19 @@ def extract_data(path, basedir):
 def make_object(data):
     """make a database object
     """
-    ddrfile = DDRFile()
-    ddrfile.sha256 = data['sha256']
-    ddrfile.annex_path_rel = data['annex_path_rel']
-    ddrfile.path_rel = data['path_rel']
-    ddrfile.file_id = data['file_id']
-    ddrfile.collection_id = data['collection_id']
-    return ddrfile
+    o = DDRFile()
+    o.sha256 = data['sha256']
+    o.annex_path_rel = data['annex_path_rel']
+    o.path_rel = data['path_rel']
+    o.file_id = data['file_id']
+    o.collection_id = data['collection_id']
+    return o
 
-def save_object(ddrfile):
+def save_object(o):
     """save object to database if not already existing
     """
     try:
-        existing = DDRFile.get(DDRFile.sha256 == ddrfile.sha256)
+        existing = DDRFile.get(DDRFile.sha256 == o.sha256)
     except:
         existing = False
     
@@ -106,14 +107,21 @@ def save_object(ddrfile):
         return True
 
 def process_collection(collection_path):
+    print('%s %s' % (datetime.now(), collection_path))
+    print('%s Gathering files...' % datetime.now())
+    print(datetime.now())
     paths = find_meta_files(collection_path)
     num = len(paths)
     for n,path in enumerate(paths):
         data = extract_data(path, collection_path)
-        ddrfile = make_object(data)
-        new = save_object(ddrfile)
+        o = make_object(data)
+        new = save_object(o)
         if new:
             status = '+'
         else:
             status = ' '
-        print('%s/%s %s %s' % (n, num, status, path))
+        now = datetime.now()
+        print('%s %s/%s %s %s %s' % (
+            now, n, num, status, o.path_rel, o.sha256)
+        )
+    print('%s DONE %s' % (datetime.now(), collection_path))
