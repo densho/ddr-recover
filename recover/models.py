@@ -8,6 +8,8 @@
 # - working file path (relative to collection dir)
 # - annex objects file path (relative to collection dir)
 
+import os
+
 from peewee import *
 
 from config import db
@@ -21,7 +23,7 @@ class DDRFile(Model):
 
     class Meta:
         database = db
-    
+
     def dumpcsv(self):
         return ','.join([
             self.sha256,
@@ -43,3 +45,19 @@ class PhotorecFile(Model):
             self.sha256,
             self.path_rel
         ])
+
+MATCH_SQL = """
+SELECT p.sha256, p.path_rel, d.collection_id, d.annex_path_rel
+FROM ddrfile d, photorecfile p
+WHERE p.sha256 = d.sha256;
+"""
+def link_photorec_ddr():
+    """
+    """
+    src_dest = []
+    for sha256,src_path_rel,cid,annex_path_rel in db.execute_sql(MATCH_SQL,):
+        src_dest.append([
+            src_path_rel,
+            os.path.join(cid, annex_path_rel)
+        ])
+    return src_dest

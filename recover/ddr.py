@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 import os
 
-from models import db, DDRFile, PhotorecFile
+from models import DDRFile, PhotorecFile
 
 
 def find_meta_files( basedir, recursive=False, model='file', files_first=False, force_read=True, testing=False ):

@@ -2,6 +2,7 @@ import click
 
 import ddr
 import photorec
+from models import link_photorec_ddr
 
 
 @click.group()
@@ -30,6 +31,13 @@ def dumpcsv(source):
         ddr.dump()
     elif source == 'photorec':
         photorec.dump()
+
+@recover.command()
+def link():
+    """Match photorec files to DDR files
+    """
+    for src_dest in link_photorec_ddr():
+        print(','.join(src_dest))
 
 
 if __name__ == '__main__':
