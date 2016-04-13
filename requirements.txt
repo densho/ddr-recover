@@ -1,4 +1,5 @@
 # pip install -U -r requirements.txt
 
-peewee
-pymysql
+Click    # http://click.pocoo.org/
+peewee   # https://peewee.readthedocs.org
+pymysql  # https://github.com/PyMySQL/PyMySQL
