@@ -8,10 +8,6 @@
 # - working file path (relative to collection dir)
 # - annex objects file path (relative to collection dir)
 
-# >>> from models import db, DDRFile, PhotorecFile
-# >>> db.connect()
-# >>> db.create_tables([DDRFile, PhotorecFile])
-
 from peewee import *
 
 from config import db
