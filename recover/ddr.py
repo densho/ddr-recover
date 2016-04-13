@@ -99,14 +99,21 @@ def save_object(ddrfile):
     except:
         existing = False
     
-    if not existing:
+    if existing:
+        return False
+    else:
         ddrfile.save(force_insert=True)
+        return True
 
 def process_collection(collection_path):
     paths = find_meta_files(collection_path)
     num = len(paths)
     for n,path in enumerate(paths):
-        print('%s/%s %s' % (n, num, path))
         data = extract_data(path, collection_path)
         ddrfile = make_object(data)
-        save_object(ddrfile)
+        new = save_object(ddrfile)
+        if new:
+            status = '+'
+        else:
+            status = ' '
+        print('%s/%s %s %s' % (n, num, status, path))
