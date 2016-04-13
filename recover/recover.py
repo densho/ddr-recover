@@ -1,7 +1,7 @@
 import click
 
-from ddr import process_collection
-from photorec import process_dir
+import ddr
+import photorec
 
 
 @click.group()
@@ -11,18 +11,25 @@ def recover():
     pass
 
 @recover.command()
+@click.argument('source')
 @click.argument('path')
-def ddr(path):
-    """Get data for binaries in DDR collection repo.
+def get(source, path):
+    """Get data for binaries from DDR collection repo or photorec dir.
     """
-    process_collection(path)
+    if source == 'ddr':
+        ddr.process_collection(path)
+    elif source == 'photorec':
+        photorec.process_dir(path)
 
 @recover.command()
-@click.argument('path')
-def photorec(path):
-    """Get hashes and paths for files in photorec dir.
+@click.argument('source')
+def dumpcsv(source):
+    """Dump data from source to commandline in CSV format.
     """
-    process_dir(path)
+    if source == 'ddr':
+        ddr.dump()
+    elif source == 'photorec':
+        photorec.dump()
 
 
 if __name__ == '__main__':

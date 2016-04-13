@@ -81,3 +81,7 @@ def process_dir(dir_path):
             o.sha256[:30]
         ))
     print('%s DONE %s' % (datetime.now(), dir_path))
+
+def dump():
+    for o in PhotorecFile.select():
+        print(o.dumpcsv())

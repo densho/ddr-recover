@@ -21,6 +21,15 @@ class DDRFile(Model):
 
     class Meta:
         database = db
+    
+    def dumpcsv(self):
+        return ','.join([
+            self.sha256,
+            self.annex_path_rel,
+            self.path_rel,
+            self.file_id,
+            self.collection_id,
+        ])
 
 class PhotorecFile(Model):
     sha256 = CharField(primary_key=True)
@@ -28,3 +37,9 @@ class PhotorecFile(Model):
 
     class Meta:
         database = db
+    
+    def dumpcsv(self):
+        return ','.join([
+            self.sha256,
+            self.path_rel
+        ])

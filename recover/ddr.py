@@ -127,3 +127,7 @@ def process_collection(collection_path):
             o.sha256[:30]
         ))
     print('%s DONE %s' % (datetime.now(), collection_path))
+
+def dump():
+    for o in DDRFile.select():
+        print(o.dumpcsv())
