@@ -1,11 +1,11 @@
 from peewee import *
 
 db = SqliteDatabase(
-    'recovery.db'
+    'recover.db'
 )
 
 #db = MySQLDatabase(
-#    'recovery',
+#    'recover',
 #    host='',
 #    user='',
 #    password='',
