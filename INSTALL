@@ -5,6 +5,11 @@ Initial install::
     $ mkvirtualenv VIRTUALENVNAME
     $ pip install -U -r requirements.txt
     $ cd recover
+    $ cat config.py
+    $ vi database.cfg
+    Cut and paste the SAMPLE config file into database.cfg.
+
+Create database:
     $ python
     >>> from config import db
     >>> from models import DDRFile, PhotorecFile
