@@ -1,10 +1,10 @@
 Initial install::
 
-    $ git clone https://github.com/densho/ddr-recovery.git
-    $ cd ddr-recovery
+    $ git clone https://github.com/densho/ddr-recover.git
+    $ cd ddr-recover
     $ mkvirtualenv VIRTUALENVNAME
     $ pip install -U -r requirements.txt
-    $ cd recovery
+    $ cd recover
     $ python
     >>> from config import db
     >>> from models import DDRFile, PhotorecFile
@@ -15,5 +15,5 @@ Initial install::
 After initial installation::
 
     $ workon VIRTUALENVNAME
-    $ cd ddr-recovery/recovery
+    $ cd ddr-recover/recover
     $ python recover.py
