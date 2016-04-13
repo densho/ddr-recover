@@ -45,13 +45,9 @@ def find_meta_files( basedir, recursive=False, model='file', files_first=False, 
                         paths.append(path)
     return paths
 
-#        "path_rel": "ddr-testing-141-2-master-c467381d46.pdf"
-#        "sha1": "c467381d4610639d77ccf54c82f531ea8508a788"
-#        "sha256": "d632157e3c3d6c2d8a425060a2c9d63524458493414db3e497bc8266d903ecfd"
-#        "md5": "c11c2c3cbd06b91cd3c4fab6faf0bfba"
-#        "size": 30324543
-
 def extract_data(path, basedir):
+    """Pulls data from JSON; calculates some values
+    """
     FIELDS = [
         'path_rel',
         'sha256',
@@ -85,6 +81,8 @@ def extract_data(path, basedir):
     return data
 
 def make_object(data):
+    """make a database object
+    """
     ddrfile = DDRFile()
     ddrfile.sha256 = data['sha256']
     ddrfile.annex_path_rel = data['annex_path_rel']
@@ -94,15 +92,21 @@ def make_object(data):
     return ddrfile
 
 def save_object(ddrfile):
-    existing = DDRFile.get(DDRFile.sha256 == ddrfile.sha256)
+    """save object to database if not already existing
+    """
+    try:
+        existing = DDRFile.get(DDRFile.sha256 == ddrfile.sha256)
+    except:
+        existing = False
+    
     if not existing:
         ddrfile.save(force_insert=True)
 
-
-BASEDIR = '/tmp/ddr-testing-141'
-paths = find_meta_files(BASEDIR)
-for path in paths:
-    print(path)
-    data = extract_data(path, BASEDIR)
-    ddrfile = make_object(data)
-    save_object(ddrfile)
+def process_collection(collection_path):
+    paths = find_meta_files(collection_path)
+    num = len(paths)
+    for n,path in enumerate(paths):
+        print('%s/%s %s' % (n, num, path))
+        data = extract_data(path, collection_path)
+        ddrfile = make_object(data)
+        save_object(ddrfile)
