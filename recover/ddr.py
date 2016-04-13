@@ -120,8 +120,10 @@ def process_collection(collection_path):
             status = '+'
         else:
             status = ' '
-        now = datetime.now()
+        now = str(datetime.now())
         print('%s %s/%s %s %s %s' % (
-            now, n, num, status, o.path_rel, o.sha256)
-        )
+            now[:23], n, num, status,
+            os.path.basename(o.path_rel),
+            o.sha256[:30]
+        ))
     print('%s DONE %s' % (datetime.now(), collection_path))
